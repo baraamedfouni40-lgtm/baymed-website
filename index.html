@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlTag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر مكتبة Baymed</title>
+    <!-- ربط الأيقونات وملف التنسيق -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- شريط التنقل العلوي (Temu Style) -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="brand-logo">
+                <i class="fa-solid fa-bag-shopping logo-icon"></i>
+                <span>Baymed <small>Temu Mode</small></span>
+            </div>
+            
+            <div class="search-bar-container">
+                <input type="text" id="searchInput" placeholder="ابحث عن أدوات مدرسية، كتب، حقائب...">
+                <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+            <div class="header-actions">
+                <select id="langSwitcher" class="lang-select" onchange="changeLanguage()">
+                    <option value="ar">العربية</option>
+                    <option value="en">English</option>
+                </select>
+                <button class="logout-nav-btn hidden" id="navLogoutBtn" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> <span id="txtNavLogout">خروج</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main-content">
+        
+        <!-- 1. شاشة تسجيل الدخول الكبيرة -->
+        <div id="loginScreen" class="auth-card">
+            <h2 id="loginTitle">مرحباً بك في Baymed</h2>
+            <p class="auth-subtitle" id="loginSub">اختر طريقة الدخول لتصفح أو إدارة العروض الكبرى</p>
+            
+            <div class="role-grid">
+                <div class="role-box selected" id="cardWorker" onclick="setRole('worker')">
+                    <input type="radio" name="role" value="worker" checked>
+                    <i class="fa-solid fa-user-tie role-icon"></i>
+                    <div id="txtWorker" class="role-name">أعمل في المكتبة</div>
+                    <small class="role-desc">إضافة منتجات وتعديل الأسعار</small>
+                </div>
+                
+                <div class="role-box" id="cardUser" onclick="setRole('user')">
+                    <input type="radio" name="role" value="user">
+                    <i class="fa-solid fa-store role-icon"></i>
+                    <div id="txtUser" class="role-name">مستخدم شخصي</div>
+                    <small class="role-desc">تصفح وشراء أحدث الأدوات</small>
+                </div>
+            </div>
+
+            <button class="btn-primary-large" id="loginBtn" onclick="handleLogin()">
+                <span id="txtSubmitLogin">دخول للمتجر</span> <i class="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <!-- قسم الـ QR Code المدمج في الأسفل للوصول السريع لصفحة الفيسبوك -->
+            <div class="qr-container-temu">
+                <img src="https://qrserver.com" alt="QR Code لمكتبة Baymed">
+                <p id="txtQrCode">امسح الكود لزيارة صفحتنا الرسمية على فيسبوك</p>
+                <a href="https://facebook.com" target="_blank" class="fb-link-btn">
+                    <i class="fa-brands fa-facebook"></i> رابط مباشر
+                </a>
+            </div>
+        </div>
+
+        <!-- 2. لوحة تحكم مدير المكتبة (Temu Merchant) -->
+        <div id="workerDashboard" class="hidden dashboard-layout">
+            <div class="dashboard-header">
+                <div>
+                    <h2 id="workerTitle">لوحة التحكم والتصوير الذكي</h2>
+                    <p id="workerSub" class="merchant-tag">مركز تحكم التاجر - مكتبة Baymed</p>
+                </div>
+                <button class="btn-scan" onclick="triggerCamera()" id="camBtn">
+                    <i class="fa-solid fa-camera animate-bounce"></i> <span id="txtCamBtn">تصوير بالذكاء الاصطناعي</span>
+                </button>
+                <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="processImage(event)">
+            </div>
+
+            <!-- مؤشر التحميل الذكي -->
+            <div id="loadingStatus" class="hidden ai-loading-box">
+                <div class="spinner"></div>
+                <p id="loadText">جاري مسح الأداة ضوئياً والتعرف على الاسم والسعر التنافسي...</p>
+            </div>
+
+            <!-- شبكة إدارة وتعديل المنتجات الكبيرة -->
+            <div id="productsList" class="products-grid-edit">
+                <!-- المنتجات المصورة ستظهر هنا فارغة في البداية -->
+            </div>
+        </div>
+
+        <!-- 3. واجهة متجر المستخدم الشخصي (Temu Shopping Grid) -->
+        <div id="userDashboard" class="hidden">
+            <!-- بنر إعلاني ضخم -->
+            <div class="promo-banner">
+                <div class="banner-text">
+                    <span class="badge-flash">تخفيضات العودة للمدارس 🔥</span>
+                    <h3>خصومات تصل إلى 60% على الأدوات المكتبية</h3>
+                    <p>شحن سريع وتوصيل آمن لجميع المنتجات</p>
+                </div>
+            </div>
+
+            <h2 class="section-title" id="userTitle">اكتشف عروضنا اليومية</h2>
+            
+            <!-- شبكة عرض المنتجات الفاخرة للزبائن -->
+            <div id="clientProductsList" class="shopping-grid">
+                <!-- ستظهر هنا المنتجات المصورة فقط للزبائن -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ربط ملف الـ JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
+
